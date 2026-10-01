@@ -28,7 +28,7 @@ At half HP it is replaced by **two different enemies** with their own art, each 
 Its dissolve countdown is `2 + act + (dark ? 1 : 0)`: 4 turns in Volume II, 5 in III, 6 in IV, one more from the dark. It still gains +2 Strength each turn.
 
 ## U5. The Undertow shows every action
-- Draw it as `cut_wellUndertowEmpty` (empty tentacles) with **body sprites** `sp_wellBody` hung from the tentacle tips. Positions (fractions of the art box, anchor = top of the body): `[.19,.26]`, `[.40,.11]`, `[.72,.06]`, `[.86,.15]` from the start, and `[.37,.38]`, `[.65,.77]` added in *What Sank*. Body width about 6.5% of the art width.
+- Draw it as `cut_wellUndertowEmpty` (empty tentacles) with **body sprites** `sp_wellBody` hung from the tentacle tips. Positions (fractions of the art box, anchor = top of the body): `[.10,.215]`, `[.405,.115]`, `[.615,.115]`, `[.905,.215]` from the start, and `[.105,.565]`, `[.905,.565]` added in *What Sank*. Body width about 6.5% of the art width.
 - **Hurl:** a body flies at the player (scale up, fade, red flash), then the tentacle drags it back up.
 - **Sever** (15% of max HP in one player turn, 20% in Chapter II): that body falls into the ink and is gone. A `Bodies N` chip counts down.
 - **What Sank** (half HP): two more bodies rise out of the ink into two more tentacles; it now hurls two a turn. With no bodies left, it only blocks.
@@ -65,6 +65,10 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 - **The rusted cages.** These are the ones it never found. They sank to the bottom on their own.
 
 **New art:**
+- **The Undertow is redrawn.** Replace `cut_wellUndertowEmpty` and `cut_wellUndertow` with the new files. It now has eight tentacles, each one clearly growing from the body, with no knot and no stray pieces.
+- **The body points move to the new tentacle tips.** If U5 is already in, update its points to `[[.10,.215],[.405,.115],[.615,.115],[.905,.215],[.105,.565],[.905,.565]]`:
+  - the first four are the raised tentacles;
+  - the last two are the side tentacles, used in *What Sank*.
 - `cut_wellUndertowMaw`: The Undertow with its maw open and the chained cage visible in its throat. It has the same pose and framing as `cut_wellUndertowEmpty`, so it can be swapped in place.
 - `cut_wellCageSpat`: the cage, just heaved up, lying in a pool of ink and slime.
 
