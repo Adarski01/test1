@@ -137,7 +137,7 @@ drowned:{q:'He asked the Author where the bridge went. Will anyone ever answer h
     low:['Not under again. Not yet.'],
     noInk:['Breathe. Wait.'],
     win:['There. That is where it went.']},
-  end:{light:'He reaches the end of the bridge and finds it was never finished. He finishes it himself, and hands the lantern to the one who was walking behind him all along.',
+  end:{light:'He reaches the end of the bridge and finds it was never finished. He finishes it himself, and hands the lantern to the one who was walking behind him all along. They ask his name. Nobody ever wrote him one, so he chooses it: Yona, the one who came back up out of the deep.',
     dark:'He goes back down. Not into the cage: into the quiet, where the others stopped asking. He finds that he can stop too, and the Well closes over the last question in the book.'}}
 ```
 
@@ -156,7 +156,7 @@ He follows **Tal's two fates**, not the bought Remembered look:
 
 Build it the same way as Tal's:
 - `prog.drownedSeen={}`: add it to the default `prog`, default-guarded, and set it in the same place that sets `talSeen`.
-- `DROWNED_TONE_NAMES={light:'The One Who Finished The Bridge',dark:'The One Who Stayed Under'}`.
+- `DROWNED_TONE_NAMES={light:'Yona, Who Finished The Bridge',dark:'The One Who Stayed Under'}`.
 - `drownedLook(prog)`: the same logic as `talLook`, with the preference in `prog.skin.drowned`.
 - In the class screen, give him the same three-look picker as Tal:
   - the ORIGINAL look (`ART.cls_drowned`);
@@ -169,10 +169,16 @@ Build it the same way as Tal's:
 | Look | Name | Perk shown | Rule |
 |---|---|---|---|
 | base | ORIGINAL | Remove 1 starting card | `{removeCard:1}` (same as every base look) |
-| light | ✦ THE ONE WHO FINISHED THE BRIDGE | Cards that Surface come up upgraded | `{surfaceUpgrade:true}`: every card that Surfaces is upgraded for the rest of that combat (combat copy only). |
+| light | ✦ YONA, WHO FINISHED THE BRIDGE | Cards that Surface come up upgraded | `{surfaceUpgrade:true}`: every card that Surfaces is upgraded for the rest of that combat (combat copy only). |
 | dark | ✦ THE ONE WHO STAYED UNDER | Cards that Surface hit ALL for 3 · sinking one costs 1 HP | `{surfaceAoe:3,sinkHp:1}`: each Surface deals 3 to all enemies; each Sink costs 1 HP (not when the hand is empty and nothing sinks). |
 
 With the light look, The Last Breath no longer adds anything. That is fine: the look is the reward for the ending.
+
+**His name.** He has none during the game. The Author wrote him halfway across a bridge and locked him away before naming him, and only Tal keeps the rule of the one hero with a name. He names himself only in the light ending:
+- Once `prog.drownedSeen.light` is set, the class screen and his story page show **Yona** in small caps under *The Drowned*, the way a subtitle is shown.
+- `CLASSES.drowned.name` stays `'The Drowned'` everywhere else: saves, history lines, the Chronicle.
+- The dark look keeps him nameless.
+- The first time the light ending is earned, show one line after the ending text: *"He has a name now. He wrote it himself."*
 
 ## D7. Checks
 
@@ -187,7 +193,7 @@ With the light look, The Last Breath no longer adds anything. That is fine: the 
 - [ ] Pressure counts the Depths; Still Asking sinks itself and comes back next turn free.
 - [ ] His 10 cards appear only in his rewards and shop, with art.
 - [ ] Story page: question, 3 fragments, memory, both endings, and the 5 Well fragments.
-- [ ] A run as him that earns the light ending opens *The One Who Finished The Bridge*; one that earns the dark ending opens *The One Who Stayed Under*. Both can be worn, and their perks apply. He has no Remembered look for sale.
+- [ ] A run as him that earns the light ending opens *Yona, Who Finished The Bridge*, and his name appears under The Drowned on the class screen; one that earns the dark ending opens *The One Who Stayed Under*. Both can be worn, and their perks apply. He has no Remembered look for sale.
 - [ ] Phone width: the Depths stack and its tooltip are reachable; no sideways scroll.
 
 When done, tell the user what was added and anything you had to decide differently.
