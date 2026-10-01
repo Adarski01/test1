@@ -357,7 +357,7 @@ onDone:()=>setScreen(ctx&&ctx.returnTo||'map')
 
 ## 10. Step 8: the Catalogue of Drowned Words
 
-A panel reachable from the Well's book chip (and, if you like, from the Compendium). 21 entries, each unlocked by `prog.well.cat[key]`. Locked entries show `? ? ?` and a hint.
+A panel reachable from the Well's book chip (and, if you like, from the Compendium). 23 entries, each unlocked by `prog.well.cat[key]`. Locked entries show `? ? ?` and a hint.
 
 | Key | Name | Hint when locked |
 |---|---|---|
@@ -382,8 +382,48 @@ A panel reachable from the Well's book chip (and, if you like, from the Compendi
 | wellBottomFeeder | The Bottom-Feeder | Well-born · it smells Doubt |
 | wellBarbedUnsaid | The Barbed Unsaid | Only in Deep Water, or in the dark |
 | wellUndertow | The Undertow | Seen only after three candles |
+| rcage | A rusted cage | Something heavy that does not fight |
+| dcage | The Drowned Cage | Deep Water, in the dark, chained shut |
 
 Never-caught entries are weighted ×2 when a creature is picked, so the Catalogue fills over time.
+
+---
+
+## 11b. The cages, and the 12th character
+
+**Why there are people in cages (lore).** When a character stopped following the page (asked the Author a question he could not answer, or walked somewhere he had not written), he did not cross them out: crossing out leaves a mark. He locked them in an iron cage and lowered it into the Well, so the rest of the story could not hear them asking. The skeletons are the ones who stopped asking. The one still alive never did.
+
+**Assets:** `cut_wellRustedCage`, `cut_wellDrownedCage`, `ch_drowned` (the character, full body).
+
+**A rusted cage** (catch key `rcage`)
+- Weight: 3 in the normal table, 5 in the dark table. No tree needed.
+- Reel: `{motion:'sinker',speed:1.1,swing:.4,zone:.9,fill:.17,drain:.2}`, no thrash. Shadow: a small cage shape. Reel glyph: a cage.
+- Reveal: the cage, the caption *"Someone the Author locked away and lowered into the Well. He stopped asking long ago. He is still holding on to what he carried."*, and **three** random choices out of: a common/uncommon relic, a satchel (gold + 2 potions), a card from another class's pool, an unfound lore page (or 40 gold), a purse of 60 gold. Take one.
+- **Pry it loose** (45% of cages): a fourth, red-bordered choice: a rare relic (costs 5 HP) or an upgraded rare card (sews a Doubt into the deck).
+- Counts as taken (`prog.well.taken++`) and as a Catalogue entry.
+
+**The Drowned Cage** (catch key `dcage`)
+- Weight: 1.5, **dark table only**, only with *Deep Water*, and only while `!prog.well.freed`. Once freed it never appears again.
+- Reel: the heaviest pull in the game: `{motion:'heavy',speed:1.6,swing:.55,zone:.72,fill:.14,drain:.26,thrash:true}` (then the normal tree ease).
+- Reveal: the chained cage, the lore line above, *"This one is chained shut, and something inside is still breathing."*, button **Open it** → the character appears: **The Drowned**, *The Sentence Held Under*, saying *"He did not cross me out. He locked me in, and let the chain run until the page stopped moving. Then he forgot which page it was."*
+- Saves: `prog.well.freed=true`, `prog.well.frag=0`, `prog.well.freedVisit=<visit count>`.
+
+**The fragments.** From the next Ink Well on, each visit (once per visit, at arrival) shows one fragment, in order, until all 5 are told: then the class unlocks. Texts:
+1. *The first thing he remembers:* "There was a lantern. I was carrying it for someone. I do not remember who, only that they were walking behind me, and then they were not."
+2. *The question:* "He wrote me halfway across a bridge. I stopped and asked him where the bridge went. He did not have an answer. I think that was the first time anyone had asked him."
+3. *Why there are cages:* "He does not cross out the ones who ask. Crossing out leaves a mark on the page. He builds a cage around them instead, and lowers it into the Well, so the story cannot hear them."
+4. *The others:* "There were others down there, in cages like mine. They kept asking, for a while. Then one by one they went quiet, and the quiet ones stopped needing anything at all."
+5. *What he wants now:* "Not an ending. He owes me one, but I have stopped waiting for it. Write me a beginning instead. I will find the rest myself."
+
+On the 5th: *"The Drowned can now be written. A new character waits in the Scriptorium."* Store the fragments in `prog.well.frag` and show them also in his `CHAR_STORY` once unlocked.
+
+**The 12th class: The Drowned** (`CLASSES.drowned`; do this as its own task, after the Well works)
+- Title: *The Sentence Held Under*. Hook: *The one character who would not stop asking the Author where he was going.* Accent: `#2fa3b5` (the Well's teal).
+- Mechanic **Sink and Surface:** *Sink* a card: it goes into the Depths (max 3). At the start of each turn the oldest sunk card *Surfaces* into the hand and costs 0 that turn. Different from The Voidwalker's exhaust: the card always comes back.
+- Starting relic **The Last Breath:** the first card you Sink each combat Surfaces upgraded.
+- Starting deck: 4 Strike, 4 Brace, *Hold Under* (1: deal 7, Sink a card from your hand), *Come Up For Air* (1: gain 6 block, a card Surfaces now).
+- Still to design with the user before building: his card pool, the CHAR_STORY question, unlockable fragments, memory, voice lines and light/dark endings.
+- Unlock: `prog.well.frag>=5`.
 
 ---
 
