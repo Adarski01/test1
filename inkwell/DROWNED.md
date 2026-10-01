@@ -10,12 +10,17 @@ Same rules as before:
 **Follow Tal, the 11th class, as the template.** Copy how Tal is declared and wired in everywhere:
 - `CLASSES.tal`, `CHAR_STORY.tal`, the `cls:'tal'` cards and the relic `foldedPage`;
 - the class select grid (560×750 plate) and the secret unlock with `unlockHint`;
+- Tal's two earned looks (`TAL_TONE_NAMES`, `talLook`, `prog.talSeen`, `skinPerkOf`); see D6;
 - rewards, the shop pool, Mastery, the Compendium and the Chronicle.
 
 Wherever Tal appears in a list of classes, The Drowned goes after him. Do not invent a new pattern where Tal already has one.
 
 **New art** (in `assets/img/`, add to `ART` the way Tal's art is keyed):
-- `ch_drowned_plate`: the class plate, 560×750. `ch_drowned` (380×560, cut out) stays for the Well reveal.
+- Class plates, 560×750, keyed like Tal's (`cls_tal`, `cls_tal_light`, `cls_tal_dark`):
+  - `cls_drowned`: the base look.
+  - `cls_drowned_light`: the light-ending look.
+  - `cls_drowned_dark`: the dark-ending look.
+- `ch_drowned` (380×560, cut out) stays for the Well reveal.
 - `rl_lastBreath`: the relic icon, 128×128.
 - Card art, 240×240:
   - `cardart_holdUnder`
@@ -141,7 +146,35 @@ Also show **the five fragments told at the Well** (GUIDE 11b) in his story page,
 If the game has a per-class line in the Author's final narration or an "ending" blurb list (Tal has one, for example `tal:'The name was always his…'`), add:
 *drowned: "He was never locked away for being wrong. He was locked away for asking, and he never stopped, and in the end the question was the only thing in the Well still moving."*
 
-## D6. Checks
+## D6. His two looks: light and dark
+
+He follows **Tal's two fates**, not the bought Remembered look:
+- **No Remembered skin and no signature potion.** He was not a draft that lost itself. He was locked away for asking, so there is no face to hand back.
+- A look is **opened by living it:** finish a run as him, and the tone of the ending that run earned (`storyEnding(fr).tone`) opens that look.
+- Once a look is open, the player can wear it whenever they like.
+- These looks are **not for sale**, and `whole` never gates them.
+
+Build it the same way as Tal's:
+- `prog.drownedSeen={}`: add it to the default `prog`, default-guarded, and set it in the same place that sets `talSeen`.
+- `DROWNED_TONE_NAMES={light:'The One Who Finished The Bridge',dark:'The One Who Stayed Under'}`.
+- `drownedLook(prog)`: the same logic as `talLook`, with the preference in `prog.skin.drowned`.
+- In the class screen, give him the same three-look picker as Tal:
+  - the ORIGINAL look (`ART.cls_drowned`);
+  - the light look (`ART.cls_drowned_light`), once opened;
+  - the dark look (`ART.cls_drowned_dark`), once opened.
+- `heroPortrait` and every other place that draws Tal's chosen look should draw his chosen look too.
+
+**Perks**, in `skinPerkOf`, next to Tal's:
+
+| Look | Name | Perk shown | Rule |
+|---|---|---|---|
+| base | ORIGINAL | Remove 1 starting card | `{removeCard:1}` (same as every base look) |
+| light | ✦ THE ONE WHO FINISHED THE BRIDGE | Cards that Surface come up upgraded | `{surfaceUpgrade:true}`: every card that Surfaces is upgraded for the rest of that combat (combat copy only). |
+| dark | ✦ THE ONE WHO STAYED UNDER | Cards that Surface hit ALL for 3 · sinking one costs 1 HP | `{surfaceAoe:3,sinkHp:1}`: each Surface deals 3 to all enemies; each Sink costs 1 HP (not when the hand is empty and nothing sinks). |
+
+With the light look, The Last Breath no longer adds anything. That is fine: the look is the reward for the ending.
+
+## D7. Checks
 
 - [ ] An old save loads, and the class list shows The Drowned locked, with its hint.
 - [ ] With `prog.well.frag>=5` he unlocks and appears after Tal in the grid, with the plate and the teal accent.
@@ -154,6 +187,7 @@ If the game has a per-class line in the Author's final narration or an "ending" 
 - [ ] Pressure counts the Depths; Still Asking sinks itself and comes back next turn free.
 - [ ] His 10 cards appear only in his rewards and shop, with art.
 - [ ] Story page: question, 3 fragments, memory, both endings, and the 5 Well fragments.
+- [ ] A run as him that earns the light ending opens *The One Who Finished The Bridge*; one that earns the dark ending opens *The One Who Stayed Under*. Both can be worn, and their perks apply. He has no Remembered look for sale.
 - [ ] Phone width: the Depths stack and its tooltip are reachable; no sideways scroll.
 
 When done, tell the user what was added and anything you had to decide differently.
