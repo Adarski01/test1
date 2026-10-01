@@ -59,7 +59,10 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 - the five fragments;
 - the unlock.
 
-**The lore.** The Author locked him in a cage and lowered it into the Well. The cage never reached the bottom: **The Undertow swallowed it whole.** The bodies it hurls are the ones it swallowed that stopped breathing. He is the only one still alive in there, because he never stopped asking.
+**The lore.** The Undertow is a collector: it gathers whatever the Author drops into the Well.
+- **Bodies.** Characters thrown in without a cage drowned and sank. It does not eat them. It wraps each one in the sodden pages of the story it was cut from (the shrouds) and keeps them in its arms, which is why it has bodies to hurl.
+- **Cages.** It cannot open iron with its arms, so it **swallows a cage whole** to crack it in its gut. His cage held, and he is still alive inside.
+- **The rusted cages.** These are the ones it never found. They sank to the bottom on their own.
 
 **New art:**
 - `cut_wellUndertowMaw`: The Undertow with its maw open and the chained cage visible in its throat. It has the same pose and framing as `cut_wellUndertowEmpty`, so it can be swapped in place.
