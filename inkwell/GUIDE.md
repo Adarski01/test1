@@ -42,6 +42,8 @@ Copy every file from `assets/img/` into the game's `assets/img/`, and add each k
 | `bg_inkWell_arena` | Fight background for Well creatures (same hall, no winch). |
 | `bg_inkWell_deep` | The dark cast, The Barbed Unsaid, The Undertow. |
 | `loc_inkWell_cut` | Map building for the new room. |
+| `cut_wellUndertowEmpty` + `sp_wellBody` | The Undertow drawn with empty tentacles, and one shrouded body sprite hung from each tentacle tip (see Step 7), so every action shows. |
+| `cardart_heldBreath`, `cardart_chainRunsOut`, `cardart_undertowsPull`, `cardart_inkInTheLungs`, `cardart_salvage` | The five Well-only cards. |
 | `cut_wellRedacted` … `cut_wellUndertow` (13 files), plus `cut_wellWatermarkCrest`, `cut_wellBleed` (the Watermark's two halves) | Creature cutouts, read by `ART['cut_'+e.id]`. |
 | `orn_seal_well` | Wax seal on a Well creature's intent pill. |
 | `rl_authorsHook` | Relic icon. |
@@ -208,6 +210,20 @@ screen==='well'&&run&&React.createElement(InkWellScreen,{run,setRun,prog,setProg
 - **sewn card** (line V): `ligPrize(run,{maxRarity:'u'})`, upgraded halves on a Perfect. Show it with `<CardView card={card}/>`. Caption: *"Two pages, one thread, caught in the ink. Bound into your deck."* ("sewn into your deck" is reserved for Doubt.)
 - Every thing taken out: `prog.well.taken++`, and mark it in `prog.well.cat`.
 
+**Drowned cards are random from the player's history.** Pick from every card actually played in earlier tales (all characters, with the upgrade it had), never from `legacy`. Draw the provenance line from that history: *"Played by The Duelist · Tale 17 · broke off against The Last Editor"*, *"… · wrote an ending"*, *"Lost to the Well by … · taken by The Bookworm"*, or *"From a tale the Well no longer remembers"*. No horizontal "waterline" on the art: only a soft dark fade at the bottom and the teal *Drowned* badge.
+
+**Five cards that exist only in the Well** (`CARD_DEFS`, each with `well:true`, never in shops, rewards or class pools; badge *Ink Well*). A *card* catch is one of them 20% of the time, a *rare* catch 25%:
+
+```js
+heldBreath:{name:'Held Breath',type:'defense',r:'u',cost:1,block:8,energyNext:1,well:true},   // Gain 8 block. Next turn, gain 1 energy.
+chainRunsOut:{name:'The Chain Runs Out',type:'attack',r:'r',cost:2,dmg:14,goldOnKill:15,well:true}, // Deal 14. If this kills, gain 15 gold.
+undertowsPull:{name:'The Undertow\u2019s Pull',type:'utility',r:'r',cost:1,exhaust:true,well:true}, // A random card from discard to hand; it costs 0 this turn.
+inkInTheLungs:{name:'Ink in the Lungs',type:'special',r:'u',cost:1,poison:3,weak:1,aoe:true,well:true}, // Apply 3 poison and 1 weak to ALL.
+salvage:{name:'Salvage',type:'utility',r:'c',cost:0,draw:2,gold:5,exhaust:true,well:true},       // Draw 2. Gain 5 gold.
+```
+
+Use the game's existing ops for anything it already has (draw, energy next turn, gold, discard pick); write the rest as small ops.
+
 **The reveal screen** (prototype `reveal()`): the item rises out of the ink (dark silhouette → colour, a ripple ring behind it), a **New** stamp on its corner the first time, a one-line caption, and *Back to the Well*. Potions and lost pages show on a small framed plaque with name, rarity and what they do.
 
 ---
@@ -347,6 +363,7 @@ onDone:()=>setScreen(ctx&&ctx.returnTo||'map')
 
 ## 9. Step 7: The Undertow rising and The Rim
 
+- **The Undertow is drawn as `cut_wellUndertowEmpty` with body sprites (`sp_wellBody`) hung from its tentacle tips** (positions in the prototype, `BODY_PTS`). Every action shows on screen: *hurl* = a body flies at the player, then the tentacle drags it back up; *sever* = that body falls into the ink and is gone (the `Bodies` chip counts down); *What Sank* = two more bodies rise out of the ink into two more tentacles.
 - When the third candle lights, the next screen is the rising (prototype `undertowRises()`): the stage goes silent and dark, then the leviathan rises. Title card *Chapter I, The Surface*, the two chapter panels, and two buttons: **Face it** (starts the fight: `onFight([mkEnemy('wellUndertow')],{id:'wellUndertow'})`) and **Not yet**.
 - **Not yet** (once per tale): `undertowWaiting=true`, `undertowVisit=run.well.visits`. It rises on the **first cast of the next Ink Well**, with the kicker *"It waited for you."* While it waits, winning another fight adds no candle.
 - **The Rim plaque:** 3 candles in the Well HUD (bottom-left); unlit = dark stub, lit = cream candle with a cyan flame, from the dark = black flame. A newly lit one plays a short ignition. It glows while The Undertow waits.
