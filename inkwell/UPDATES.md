@@ -108,7 +108,7 @@ The three text buttons under the Well become round icon buttons, each with a sho
 - **Layout:** a three-column grid (`1fr auto 1fr`). The main button sits in the middle and is always centred. Leave the Well / Let go is on the left, Cast into the dark on the right.
 - **Main button:**
   - Look: a large gold disc, about 88px (78px on a phone).
-  - Icon and caption change with the moment: a hook and *Cast the line*, an arrow and *Next visit*, a lightning bolt and *Strike!* (pulsing gently), a winch and *Hold to reel* (or *Tap: rise / fall*).
+  - Icon and caption change with the moment: a hook and *Cast the line*, an arrow and *Next visit*, a hook being yanked up (an up arrow above it, motion arcs beside it) and *Strike!* (pulsing gently), a winch and *Hold to reel* (or *Tap: rise / fall*).
 - **Side buttons:**
   - Look: about 56px dark discs with a gold rim.
   - Icons: a door with an arrow for *Leave the Well*, a broken chain for *Let go*.
