@@ -520,6 +520,7 @@ table{font-variant-numeric:lining-nums tabular-nums}
       <label><input type="checkbox" id="optTap"> Tap instead of hold</label>
       <label><input type="checkbox" id="optRelax"> Relaxed reel</label>
       <label><input type="checkbox" id="optSnd" checked> Sound</label>
+      <label>Volume <select id="optVol"><option value="1">I</option><option value="2" selected>II</option><option value="3">III</option><option value="4">IV</option></select></label>
     </div>
   </div>
 </header>
@@ -803,7 +804,7 @@ NEW_FOES:[
  {key:'crust',name:'The Crust',art:'cut_crust',hp:67,wick:4,vigil:true,shadow:'spiky',motion:'still',acts:'II–IV',
   intent:{v:'8',verb:'Strikes',...ATK},trait:'Dissolving: its dry shell softens in the wet ink, and it hits harder as it goes.',
   note:'Ink that dried on a page nobody turned for a hundred years, and crawled off it. Back in the Well, the wet ink is taking it apart, and it is angry about that.',
-  rules:[['Crust (12 Block)','Starts hard. Each turn its crust softens: its Block is gone, and it gains +2 Strength. A Perfect strike spares you the first +2.'],['Outlast it','After 4 turns it dissolves back into the ink: gold only, but it still counts for a candle on the rim. Kill it sooner for the full reward.']]},
+  rules:[['Crust (12 Block)','Starts hard. Each turn its crust softens: its Block is gone, and it gains +2 Strength. A Perfect strike spares you the first +2.'],['Outlast it','In Volume II it dissolves after 4 turns, in III after 5, in IV after 6 (one more from the dark), and every turn it hits harder. When it is gone: gold only, but it still counts for a candle on the rim. Kill it sooner for the full reward.']]},
  {key:'bottomFeeder',name:'The Bottom-Feeder',art:'cut_bottomFeeder',hp:42,wick:5,shadow:'wide',motion:'bottom',acts:'I–IV',
   intent:{v:'?',verb:'Feeds',...WV},trait:'It eats Doubt. Kill it, and what it ate is gone.',
   note:'The Author’s second thoughts do not dissolve. They sink, and settle, and something at the bottom has grown fat on them.',
@@ -923,6 +924,7 @@ const Shake={t:0,add(v){if(!RM)this.t=Math.min(1,this.t+v);},apply(el,dt,time){i
 const hitStop=ms=>{G.freezeUntil=performance.now()+(RM?0:ms);};
 
 /* ---------------- STATE ---------------- */
+const crustTurns=dark=>2+(G.vol||2)+(dark?1:0);
 const S={freed:false,freedVisit:0,frag:0,lvl:0,fork:null,souls:3120,spent:0,taken:0,undertowDown:false,hook:false,sealsDemo:false};
 const G={phase:'idle',casts:0,visit:1,dark:false,cat:null,foe:null,candles:[],undertowWaiting:false,lost:[],
   biteAt:0,biteStart:0,nibbles:[],shadow:null,zone:.3,zv:0,fish:.5,ft:.5,ftT:0,prog:.3,hold:false,toggleHold:false,grace:0,perfect:true,
@@ -1191,7 +1193,8 @@ window.WELL_DEMO=k=>{if(k==='visit'){if(!$('over').hidden)closeOver();nextVisit(
 const SAMPLE_HAND=[{id:'heavySlash',up:true},{id:'serpentFang',up:false},{id:'fortress',up:false},{id:'twinBlades',up:true},{id:'arcaneBolt',up:false}];
 function monsterReveal(){
   const f=G.foe;got.add(f.key);renderCat();Snd.maw();Shake.add(.4);hitStop(150);vibrate(120);
-  const max=f.wick||4;
+  /* The Crust lasts longer in later volumes (everyone has more HP there), and longer from the dark */
+  const max=f.vigil?crustTurns(G.dark):(f.wick||4);
   /* from the dark: bigger, longer in the ink: +25% HP */
   const mhp=Math.round(f.hp*(G.dark?1.25:1));const blotHp=Math.round(mhp/3);const m=/^(\d+)/.exec(f.intent.v);G.fight={intent:G.dark&&m?{...f.intent,v:f.intent.v.replace(m[1],String(+m[1]+1))}:null,wick:max,max,dark:G.dark,hp:mhp,mhp,held:f.pulls?[pick(SAMPLE_HAND)]:[],started:false,done:false,str:0,thorns:3,perfect:G.perfectStrike,spared:false,parts:f.group?[0,1,2].map(i=>({name:'A Blot',art:'cut_blot',hp:blotHp,mhp:blotHp,stature:.55,intent:{...f.intent,v:'3–5',verb:'Strikes',col:'#ff8a85',bg:'rgba(255,138,133,.22)'}})):null,
     flash:G.perfectStrike?'Perfect strike: it comes up dazed. Weak 1.':''};
@@ -1208,7 +1211,7 @@ function renderFight(first){
     ${stage==='reveal'?`<div class="row act"><button class="btn gold" type="button" data-fight>Fight</button><button class="btn" type="button" data-letgo>Let it go</button></div>
       <p class="he small">"Let it go" לא עולה כלום: ההטלה נגמרת, והנרות לא נכבים.</p>`
     :`<div class="row act"><button class="btn gold" type="button" data-land aria-label="Win the fight">${lbl('Win the fight','Win the fight')}</button><button class="btn" type="button" data-turn aria-label="End turn">${lbl('End turn · see what it does','End turn')}</button></div>
-      <p class="he small">הדגמה: במשחק זה קרב רגיל עד המוות, בדיוק כמו כל קרב אחר. "End turn" מראה מה היצור עושה בתור שלו.${f.vigil?' הקליפה של The Crust נמסה בדיו: אחרי 4 תורות הוא מתמוסס, ואתה מקבל את מה שנשאר (זהב בלבד).':''}</p>`}
+      <p class="he small">הדגמה: במשחק זה קרב רגיל עד המוות, בדיוק כמו כל קרב אחר. "End turn" מראה מה היצור עושה בתור שלו.${f.vigil?' הקליפה של The Crust נמסה בדיו: הוא מתמוסס אחרי 4 תורות בכרך II, 5 בכרך III ו־6 בכרך IV (ועוד תור מהחושך), ואתה מקבל את מה שנשאר (זהב בלבד). אפשר להחליף כרך באפשרויות שמתחת לבאר.':''}</p>`}
     <p class="note">${esc(f.note)}</p>
     <div class="rules">${f.rules.map(r=>`<div><b>${esc(r[0])}</b> ${esc(r[1])}</div>`).join('')}${F.held.length?`<div><b>Pull Under</b> It opened by taking <em>${esc(nameOf(F.held[0]))}</em> down with it. Kill it and the card comes back.</div>`:''}</div>
     ${f.showCard?`<div class="row">${cardHTML({id:f.showCard},{sm:true})}</div>`:''}
@@ -1346,6 +1349,7 @@ addEventListener('keyup',e=>{if(e.code!=='Space')return;if(G.spaceHeld){G.spaceH
 $('optTap').onchange=e=>{G.tapMode=e.target.checked;G.hold=false;G.toggleHold=false;hud();};
 $('optRelax').onchange=e=>{G.relaxed=e.target.checked;};
 $('optSnd').onchange=e=>{Snd.toggle(e.target.checked);};
+$('optVol').onchange=e=>{G.vol=+e.target.value;};
 addEventListener('resize',()=>{size();placeRim();});
 
 /* ---------------- LOOP ---------------- */
