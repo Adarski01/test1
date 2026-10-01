@@ -28,7 +28,7 @@ At half HP it is replaced by **two different enemies** with their own art, each 
 Its dissolve countdown is `2 + act + (dark ? 1 : 0)`: 4 turns in Volume II, 5 in III, 6 in IV, one more from the dark. It still gains +2 Strength each turn.
 
 ## U5. The Undertow shows every action
-- Draw it as `cut_wellUndertowEmpty` (empty tentacles) with **body sprites** `sp_wellBody` hung from the tentacle tips. Positions (fractions of the art box, anchor = top of the body): `[.185,.205]`, `[.355,.06]`, `[.675,.085]`, `[.84,.135]` from the start, and `[.085,.485]`, `[.94,.505]` added in *What Sank*. Body width about 6.5% of the art width.
+- Draw it as `cut_wellUndertowEmpty` (empty tentacles) with **body sprites** `sp_wellBody` hung from the tentacle tips. Positions (fractions of the art box, anchor = top of the body): `[.19,.272]`, `[.355,.13]`, `[.675,.156]`, `[.835,.203]` from the start, and `[.085,.555]`, `[.935,.577]` added in *What Sank*. Body width about 6.5% of the art width.
 - **Hurl:** a body flies at the player (scale up, fade, red flash), then the tentacle drags it back up.
 - **Sever** (15% of max HP in one player turn, 20% in Chapter II): that body falls into the ink and is gone. A `Bodies N` chip counts down.
 - **What Sank** (half HP): two more bodies rise out of the ink into two more tentacles; it now hurls two a turn. With no bodies left, it only blocks.
@@ -68,11 +68,11 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 - **The Undertow is redrawn.** Replace `cut_wellUndertowEmpty` and `cut_wellUndertow` with the new files. It is now a clean standalone cutout:
   - eight tentacles, all growing from the lower body;
   - no knot, no stray pieces, and nothing growing from its head;
-  - it floats: its lowest tentacles trail from under the body and curl upward, so it never looks like it stands on them;
+  - it floats: nothing hangs below the body, and the lowest pair sweeps out sideways and curls upward;
   - no ink pool under it, so it can be animated later as its own character. Draw the ink at its feet from the arena, as for other Well creatures, if needed.
 
-  The open-mouth art (`cut_wellUndertowMaw`) is identical except for the jaw.
-- **The body points move to the new tentacle tips.** If U5 is already in, update its points to `[[.185,.205],[.355,.06],[.675,.085],[.84,.135],[.085,.485],[.94,.505]]`:
+  The open-mouth art (`cut_wellUndertowMaw`) is identical except for the mouth. The mouth opens in proportion to the face, with the cage deep inside.
+- **The body points move to the new tentacle tips.** If U5 is already in, update its points to `[[.19,.272],[.355,.13],[.675,.156],[.835,.203],[.085,.555],[.935,.577]]`:
   - the first four are the raised tentacles;
   - the last two are the side tentacles, used in *What Sank*.
 - `cut_wellUndertowMaw`: The Undertow with its maw open and the chained cage visible in its throat. It has the same pose and framing as `cut_wellUndertowEmpty`, so it can be swapped in place.
