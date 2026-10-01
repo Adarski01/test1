@@ -1,6 +1,6 @@
 # The Drowned: the 12th character
 
-**For the session that already applied `GUIDE.md` and `UPDATES.md`.** It builds the playable class that the Drowned Cage (GUIDE 11b / UPDATES U8) unlocks. Apply it **after** U8 is in and working.
+**For the session that already applied `GUIDE.md` and `UPDATES.md`.** It builds the playable class that the Drowned Cage unlocks (GUIDE 11b / UPDATES U8; since U9 the cage comes out of The Undertow the first time it is beaten). Apply it **after** U1–U12 are in and working.
 
 Same rules as before:
 - Make small anchored edits.
@@ -44,7 +44,7 @@ All art was made with Higgsfield, so it is covered by the existing AI content di
 drowned:{name:'The Drowned',title:'The Sentence Held Under',
   hook:'The one character who would not stop asking the Author where he was going.',
   icon:'⛓️',color:'#2fa3b5',cls:'drown',relic:'lastBreath',secret:true,
-  unlockHint:'Something is still breathing at the bottom of the Ink Well. Bring it up, and listen to all it has to say.',
+  unlockHint:'Something is still breathing inside The Undertow. Make it give him up, and listen to all he has to say.',
   blurb:'Sink specialist. What goes under always comes back, and costs nothing when it does.',
   law:'What Goes Under',
   lawText:'You can Sink cards into the Depths (up to 3). At the start of each turn the oldest card down there Surfaces into your hand and costs 0 that turn. Nothing you Sink is ever lost, but the Depths empty when the fight ends.',
