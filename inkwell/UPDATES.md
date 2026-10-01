@@ -7,7 +7,7 @@ Before starting, check what is already in the game. Some of these may already be
 Same rules as the guide: small anchored edits, re-read the master just before each write, never write it back from an older copy, keep saves backward-compatible.
 
 **New art** (copy from `assets/img/` into the game and add to `ART`):
-`cut_wellRustedCage`, `cut_wellDrownedCage`, `ch_drowned`, `cut_wellWatermarkCrest`, `cut_wellBleed`, `cut_wellUndertowEmpty`, `sp_wellBody`, `cardart_heldBreath`, `cardart_chainRunsOut`, `cardart_undertowsPull`, `cardart_inkInTheLungs`, `cardart_salvage`.
+`cut_wellRustedCage`, `cut_wellDrownedCage`, `ch_drowned`, `cut_wellWatermarkCrest`, `cut_wellBleed`, `cut_wellUndertowEmpty`, `sp_wellBody`, `cardart_heldBreath`, `cardart_chainRunsOut`, `cardart_undertowsPull`, `cardart_inkInTheLungs`, `cardart_salvage`. For U9: `cut_wellUndertowMaw`, `cut_wellCageSpat`.
 
 The playable reference for everything below is `prototype/inkwell.html`. Section 3 has buttons that open each changed fight directly.
 
@@ -51,6 +51,34 @@ Add to `CARD_DEFS` with `well:true` (badge *Ink Well*, colour `#2fa3b5`; never i
 
 ## U8. The cages, and the 12th character
 Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"): the rusted cage with a skeleton (choose one of three things, or pry one loose at a price), the Drowned Cage (from the dark, with Deep Water, 1.5%), freeing **The Drowned**, his five fragments over later visits, and the two new Catalogue entries (23 in total). The playable 12th class itself is a separate task, to design with the user first.
+
+## U9. The Undertow swallowed him (changes how the Drowned Cage appears)
+**Apply only after U8 works.** This changes U8 in one place: where the Drowned Cage comes from. Everything after the cage opens stays as U8 / GUIDE 11b describe:
+- *Open it*;
+- `prog.well.freed`;
+- the five fragments;
+- the unlock.
+
+**The lore.** The Author locked him in a cage and lowered it into the Well. The cage never reached the bottom: **The Undertow swallowed it whole.** The bodies it hurls are the ones it swallowed that stopped breathing. He is the only one still alive in there, because he never stopped asking.
+
+**New art:**
+- `cut_wellUndertowMaw`: The Undertow with its maw open and the chained cage visible in its throat. It has the same pose and framing as `cut_wellUndertowEmpty`, so it can be swapped in place.
+- `cut_wellCageSpat`: the cage, just heaved up, lying in a pool of ink and slime.
+
+**Changes:**
+1. **Remove the random catch.** Take `dcage` out of the dark catch table. It is no longer reeled up at 1.5%. If U8 added it, remove that line only.
+2. **The hint in the fight.** When The Undertow enters *What Sank* (half HP), and on every hurl after that, swap its art to `cut_wellUndertowMaw` for about 0.6 s, then back.
+   - Only do this while `!prog.well.freed`.
+   - The first time, add a log line: *"Something in its throat is glowing. Something in there is still breathing."*
+3. **The cage comes up.** On the **first victory** over The Undertow while `!prog.well.freed`, show a new scene **before** its normal reward:
+   - Image: `cut_wellCageSpat` on the Well background.
+   - Caption: *"The Undertow heaves, and something comes up with the ink: an iron cage, chained shut, scraped by teeth. Something inside is still breathing."*
+   - Button: **Open it**. It goes straight into the U8 Drowned Cage reveal: the character, his first line, and saving `prog.well.freed=true`, `frag=0`, `freedVisit`.
+   - Then The Undertow's normal reward follows as before.
+   - If The Undertow was already beaten before this update (an old save with `!prog.well.freed`), the cage comes up the next time it is beaten.
+4. **Fragment 3** ("Why there are cages") becomes: *"He does not cross out the ones who ask. Crossing out leaves a mark on the page. He builds a cage around them instead, and lowers it into the Well, so the story cannot hear them. He did not know what lives down there. Or he did, and lowered us anyway."*
+5. **The Catalogue entry** `dcage`: change its hint to *"In the belly of The Undertow"*. Leave the key and the count unchanged.
+6. **The cage art** `cut_wellDrownedCage` is no longer used by a catch. Keep it in `ART` anyway: old saves may reference it in the Catalogue.
 
 ---
 
