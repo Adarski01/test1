@@ -327,7 +327,7 @@ td.k{font-family:var(--display);font-size:.84rem}td.zero{color:#5d547c}td.m{font
 .foot{text-align:center;color:var(--ink-dim);font-family:var(--he);font-size:.9rem}
 
 @media (max-width:860px){.heroTop,.two{grid-template-columns:minmax(0,1fr)}.chips{justify-content:flex-start}.compare{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:600px){.stage{aspect-ratio:3/4;max-height:none}.reel{right:12px;height:50%}.track{width:36px}.controls{grid-template-columns:1fr 1fr}#bMain{grid-column:1/-1}.say{font-size:1.1rem}}
+@media (max-width:600px){.stage{aspect-ratio:3/4;max-height:none}.controls{grid-template-columns:1fr 1fr}#bMain{grid-column:1/-1}.say{font-size:1.1rem}}
 @media (max-width:480px){.forks{grid-template-columns:1fr}.btn{min-width:0;flex:1 1 140px}.mapTile{grid-template-columns:1fr;justify-items:center}.card.finalc{--cw:132px}}
 
 /* ================= v3: fixes from the third review round ================= */
@@ -360,6 +360,19 @@ td.k{font-family:var(--display);font-size:.84rem}td.zero{color:#5d547c}td.m{font
 .controls{grid-template-columns:minmax(0,1fr) 230px 170px}
 .cell3{display:grid}.cell3>.btn{width:100%}
 .btn.gone{visibility:hidden}
+/* THE REEL IS THE CENTREPIECE: while reeling, the scene dims and the gauge stands large in the middle */
+.stage.reeling::before{filter:brightness(.42) saturate(.8) blur(1.5px)}
+.stage.reeling #fx{opacity:.55;transition:opacity .4s}
+.reel{left:50%;right:auto;top:54%;transform:translate(-50%,-50%);height:70%;gap:12px}
+.reel .track{width:104px;border-radius:12px}
+.reel .track::before,.reel .track::after{width:28px;height:28px}
+.reel .track::before{top:-17px}.reel .track::after{bottom:-17px}
+.reel .zone{left:6px;right:6px;border-radius:6px}
+.reel .zone::before,.reel .zone::after{height:8px}
+.reel .meter,.reel .tension{width:18px;border-radius:9px}
+.reel .fish{width:60px;height:60px;margin-left:-30px;margin-bottom:-30px}
+.reel .fish svg{width:54px;height:54px}
+@media (max-width:600px){.reel{height:62%;top:55%}.reel .track{width:84px}.reel .meter,.reel .tension{width:15px}.reel .fish{width:50px;height:50px;margin-left:-25px;margin-bottom:-25px}.reel .fish svg{width:44px;height:44px}}
 .controls.solo #bDark,.controls.solo .cell3{display:none}.controls.solo #bMain{grid-column:1/-1;justify-self:center;width:min(100%,440px)}
 .well.modal .controls,.well.modal .opts{visibility:hidden}
 @media (max-width:600px){.controls{grid-template-columns:1fr 1fr;align-items:stretch}#bMain{grid-column:1/-1}.btn{letter-spacing:.06em;font-size:.74rem}.btn.small{min-height:44px}}
@@ -1139,7 +1152,7 @@ function hud(){
   /* buttons swap inside fixed cells, so nothing under the cursor moves */
   $('bDark').disabled=busy||G.casts<=0;m.parentNode.classList.toggle('solo',G.phase==='idle'&&G.casts<=0);$('bDark').classList.toggle('gone',busy||G.casts<=0);
   $('bLet').hidden=G.phase!=='reel';$('bLeave').hidden=G.phase==='reel';$('bLeave').classList.toggle('gone',G.phase!=='idle'||G.casts<=0);$('bLeave').textContent='Leave the Well';
-  $('stage').classList.toggle('dark',G.dark&&!['idle'].includes(G.phase));$('stage').classList.toggle('grab',['bite','reel'].includes(G.phase));
+  $('stage').classList.toggle('dark',G.dark&&!['idle'].includes(G.phase));$('stage').classList.toggle('grab',['bite','reel'].includes(G.phase));$('stage').classList.toggle('reeling',G.phase==='reel');
   $('stage').style.setProperty('--bg',`url(${G.dark&&G.phase!=='idle'?IMG.bg_inkWell_deep:IMG.bg_inkWell})`);
 }
 const say=(t,cls)=>{const e=$('say');e.textContent=t;e.className='say'+(cls?' '+cls:'');if(cls&&cls.includes('pop')){void e.offsetWidth;}};

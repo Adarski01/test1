@@ -96,6 +96,14 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 ## U10. *Next visit* is centred
 When the casts for this visit are used up, only the main button is left (*Next visit*). Hide the empty cells for *Cast into the dark* and *Leave the Well*, and centre that button in the control row, at most about 440px wide. On a phone it keeps its full width.
 
+## U11. The reel is the centrepiece
+While reeling (phase `reel`), the gauge is the main thing on screen, not a small panel on the right:
+- **Position:** centred in the Well scene (`left:50%`, about 54% from the top), about 70% of the scene's height (62% on a phone).
+- **Size:** the track is about 104px wide (84px on a phone), the progress meter about 18px. The hook glyph is about 54px, and the light zone and corner diamonds are scaled to match.
+- **Background:** the scene behind it dims and blurs slightly (brightness about .42, blur about 1.5px). The chain and hook layer fades to about 55%. Both return when the reel ends.
+
+The controls and the reel logic are unchanged. See `prototype/inkwell.html`: cast, wait for the bite and strike.
+
 ---
 
 When done, tell the user which items you applied and which were already in.
