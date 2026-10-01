@@ -24,7 +24,7 @@ This guide puts the Ink Well mini-game into the game, step by step. The design i
 - **The Well screen:** a flooded hall with a small hand winch on a stone jetty. 3 casts per visit (4 with the tree). You lower an iron hook into the ink, wait for a bite, **Strike**, then **reel** (hold to keep the catch inside the light).
 - **What comes up:** gold, a potion, a card, a rare card, Lost Souls, a lost page, Doubt, a *drowned card* (tree line IV), a *sewn card* (tree line V), or **a creature that bites back**.
 - **Creatures:** 11 creatures that live **only** in the Well. A creature is a **normal fight to the death**, exactly like any other fight. Before it starts you may **Let it go** (the cast is spent, nothing else happens).
-- **Pull levels:** each creature pulls *light*, *heavy* or *abyssal*. Heavier pulls are harder to reel and pay more. **Casting into the dark** makes every creature one level heavier, gives it +1 Strength, and doubles the gold. **Every line written in the tree makes every reel calmer.**
+- **Pull levels:** each creature pulls *light*, *heavy* or *abyssal*. Heavier pulls are harder to reel and pay more. **Casting into the dark** makes every creature bigger and longer in the ink (+25% HP, drawn 15% larger), one pull level heavier, +1 Strength, and doubles the gold. **Every line written in the tree makes every reel calmer.**
 - **The Rim:** a small plaque on the Well screen with 3 candles. Every creature you beat lights one (a black flame if it came from the dark). The candles stay lit from Well to Well until the tale ends. **Only losing a fight puts them out** (which, in this game, is death anyway). Three candles bring up **The Undertow**.
 - **The Undertow:** a leviathan boss-tier fight. It holds shrouded bodies in its tentacles and hurls them at you. "Not yet" postpones it to the next Ink Well, once per tale.
 - **The ninth soul tree:** *What The Ink Kept*.
@@ -42,7 +42,7 @@ Copy every file from `assets/img/` into the game's `assets/img/`, and add each k
 | `bg_inkWell_arena` | Fight background for Well creatures (same hall, no winch). |
 | `bg_inkWell_deep` | The dark cast, The Barbed Unsaid, The Undertow. |
 | `loc_inkWell_cut` | Map building for the new room. |
-| `cut_wellRedacted` … `cut_wellUndertow` (13 files) | Creature cutouts, read by `ART['cut_'+e.id]`. |
+| `cut_wellRedacted` … `cut_wellUndertow` (13 files), plus `cut_wellWatermarkCrest`, `cut_wellBleed` (the Watermark's two halves) | Creature cutouts, read by `ART['cut_'+e.id]`. |
 | `orn_seal_well` | Wax seal on a Well creature's intent pill. |
 | `rl_authorsHook` | Relic icon. |
 | `cardart_almostWord` | Card art for *The Word You Almost Had*. |
@@ -217,7 +217,7 @@ screen==='well'&&run&&React.createElement(InkWellScreen,{run,setRun,prog,setProg
 **Encounter card** (prototype `renderFight`): when a creature is reeled in, show it in the arena (`bg_inkWell_arena`, or `bg_inkWell_deep` from the dark) with its name, *Only in the Ink Well*, HP, trait line, rules, and two buttons: **Fight** and **Let it go**. *Let it go* costs nothing but the cast. **Fight** calls:
 
 ```js
-onFight([mkEnemy(id, 1, dark?1:0)], {id, dark, pull, perfect})
+onFight([mkEnemy(id, (dark?1.25:1)*actHpMul, dark?1:0)], {id, dark, pull, perfect})
 ```
 
 For The Blots the encounter is three of them: `[mkEnemy('wellBlot'),mkEnemy('wellBlot'),mkEnemy('wellBlot')]`. Pass the act's `hpMul` like the map's fights do.
@@ -277,7 +277,8 @@ wellUndertow:{name:'The Undertow',hp:[100,100],icon:'🐙',art:'cut_wellUndertow
 | `crust:true` + `countdown:4` | Each of its turns: Block → 0, +2 Strength (a Perfect strike skips the first +2). At 0 it dissolves: the fight ends as a win, **gold only**, but it still lights a candle. | Remove `countdown` until this is written (make sure the existing countdown never makes it explode). |
 | `t:'hurl'` / `'hurl2'` | Hurls a shrouded body: damage `v`, once / twice. `bodies` counts down per hurl. | Treat as `atk` / `atk2`. |
 | Sever (The Undertow) | Dealing 15% of its max HP in one player turn (20% in *What Sank*) severs a tentacle: `bodies−1` and it cannot hurl this turn. At 0 bodies it only blocks. | Leave out. |
-| Merge (The Blots) | An encounter of three `wellBlot`. If two or more are alive at the start of turn 2, they merge into one `wellGreatBlot` (HP = their HP ×1.25, +1 Strength per extra blot). Area damage stops the merge. | Three separate blots. |
+| Merge (The Blots) | An encounter of three `wellBlot`. If two or more are alive at the start of turn 2, they merge into one `wellGreatBlot` (HP = their HP ×1.25, +1 Strength per extra blot). Area damage stops the merge. The arena must really change: the three small blots flow into one `cut_wellGreatBlot` with a short merge animation. | Three separate blots. |
+| Watermark split | At half HP it becomes two **different** enemies: `wellWatermarkCrest` (art `cut_wellWatermarkCrest`: a torn half-bell with the crest and one trapped face; holds the gripped card; intent 6 *Pulls under*) and `wellBleed` (art `cut_wellBleed`: a ragged shred bleeding red-black ink; stings 9–11). Each gets half of the remaining HP. Use the game's `splitAt` with these two ids as the halves. Play a short tear animation. | Plain `splitAt:0.5`. |
 | Quill Urchin | Each of its turns: Thorns −1, Strength +1. | Plain `thorns:3`. |
 | Bookworm belly | +3 damage per card it ate (`eatPage`), max 2. All eaten cards come back on death. | Plain `eatPage`. |
 
