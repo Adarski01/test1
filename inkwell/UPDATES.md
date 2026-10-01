@@ -93,6 +93,9 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 5. **The Catalogue entry** `dcage`: change its hint to *"In the belly of The Undertow"*. Leave the key and the count unchanged.
 6. **The cage art** `cut_wellDrownedCage` is no longer used by a catch. Keep it in `ART` anyway: old saves may reference it in the Catalogue.
 
+## U10. *Next visit* is centred
+When the casts for this visit are used up, only the main button is left (*Next visit*). Hide the empty cells for *Cast into the dark* and *Leave the Well*, and centre that button in the control row, at most about 440px wide. On a phone it keeps its full width.
+
 ---
 
 When done, tell the user which items you applied and which were already in.

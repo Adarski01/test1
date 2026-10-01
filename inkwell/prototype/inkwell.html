@@ -360,6 +360,7 @@ td.k{font-family:var(--display);font-size:.84rem}td.zero{color:#5d547c}td.m{font
 .controls{grid-template-columns:minmax(0,1fr) 230px 170px}
 .cell3{display:grid}.cell3>.btn{width:100%}
 .btn.gone{visibility:hidden}
+.controls.solo #bDark,.controls.solo .cell3{display:none}.controls.solo #bMain{grid-column:1/-1;justify-self:center;width:min(100%,440px)}
 .well.modal .controls,.well.modal .opts{visibility:hidden}
 @media (max-width:600px){.controls{grid-template-columns:1fr 1fr;align-items:stretch}#bMain{grid-column:1/-1}.btn{letter-spacing:.06em;font-size:.74rem}.btn.small{min-height:44px}}
 @media (pointer:coarse){.btn.small{min-height:44px}.opts label{min-height:44px;padding:0 8px}.opts input{width:20px;height:20px}.reset{min-height:44px;padding:0 16px}}
@@ -1136,7 +1137,7 @@ function hud(){
   else if(G.phase==='reel'){m.textContent=G.tapMode?'Tap: rise / fall':'Hold to reel';m.disabled=false;}
   else{m.textContent='…';m.disabled=true;}
   /* buttons swap inside fixed cells, so nothing under the cursor moves */
-  $('bDark').disabled=busy||G.casts<=0;$('bDark').classList.toggle('gone',busy||G.casts<=0);
+  $('bDark').disabled=busy||G.casts<=0;m.parentNode.classList.toggle('solo',G.phase==='idle'&&G.casts<=0);$('bDark').classList.toggle('gone',busy||G.casts<=0);
   $('bLet').hidden=G.phase!=='reel';$('bLeave').hidden=G.phase==='reel';$('bLeave').classList.toggle('gone',G.phase!=='idle'||G.casts<=0);$('bLeave').textContent='Leave the Well';
   $('stage').classList.toggle('dark',G.dark&&!['idle'].includes(G.phase));$('stage').classList.toggle('grab',['bite','reel'].includes(G.phase));
   $('stage').style.setProperty('--bg',`url(${G.dark&&G.phase!=='idle'?IMG.bg_inkWell_deep:IMG.bg_inkWell})`);
