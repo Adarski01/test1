@@ -68,6 +68,7 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 - **The Undertow is redrawn.** Replace `cut_wellUndertowEmpty` and `cut_wellUndertow` with the new files. It is now a clean standalone cutout:
   - eight tentacles, all growing from the lower body;
   - no knot, no stray pieces, and nothing growing from its head;
+  - it floats: its lowest tentacles trail from under the body and curl upward, so it never looks like it stands on them;
   - no ink pool under it, so it can be animated later as its own character. Draw the ink at its feet from the arena, as for other Well creatures, if needed.
 
   The open-mouth art (`cut_wellUndertowMaw`) is identical except for the jaw.
