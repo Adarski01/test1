@@ -104,6 +104,24 @@ While reeling (phase `reel`), the gauge is the main thing on screen, not a small
 
 The controls and the reel logic are unchanged. See `prototype/inkwell.html`: cast, wait for the bite and strike.
 
+## U12. Round icon controls, the cast in the middle
+The three text buttons under the Well become round icon buttons, each with a short caption under it:
+- **Layout:** a three-column grid (`1fr auto 1fr`). The main button sits in the middle and is always centred. Leave the Well / Let go is on the left, Cast into the dark on the right.
+- **Main button:**
+  - Look: a large gold disc, about 88px (78px on a phone).
+  - Icon and caption change with the moment: a hook and *Cast the line*, an arrow and *Next visit*, a lightning bolt and *Strike!* (pulsing gently), a winch and *Hold to reel* (or *Tap: rise / fall*).
+- **Side buttons:**
+  - Look: about 56px dark discs with a gold rim.
+  - Icons: a door with an arrow for *Leave the Well*, a broken chain for *Let go*.
+  - *Into the dark* is violet: a hook with a crescent moon.
+- **Hidden buttons:** they keep their cell, so nothing moves.
+- **Captions:** on a phone they wrap to two lines.
+- **Labels:** every button keeps its full label as `title` and `aria-label`.
+
+Icons are inline SVG with `stroke: currentColor`. Copy them from the prototype (`CTL_ICO`). Keep the existing handlers: pointer down/up on the main button for hold-to-reel, and Enter.
+
+**The monster glyph** in the reel gauge (for a creature on the line) is now a dark predatory fish silhouette: teeth, a pale eye and a glowing lure, with a red outline. It replaces the pink toothed mouth. Copy it from the prototype (`GLYPH.maw`).
+
 ---
 
 When done, tell the user which items you applied and which were already in.
