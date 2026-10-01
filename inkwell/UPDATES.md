@@ -55,3 +55,5 @@ Everything in **section 11b of `GUIDE.md`** ("The cages, and the 12th character"
 ---
 
 When done, tell the user which items you applied and which were already in.
+
+**Next, as its own step:** `DROWNED.md` builds the 12th character (The Drowned). Start it only once U8 works.
