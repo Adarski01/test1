@@ -487,6 +487,8 @@ table{font-variant-numeric:lining-nums tabular-nums}
 @keyframes riseB{from{transform:translate(-50%,260%);opacity:0;filter:blur(3px)}}
 .well.hit #over{animation:hitflash .4s ease-out}
 @keyframes hitflash{0%{box-shadow:inset 0 0 0 200px rgba(255,90,90,.18)}100%{box-shadow:none}}
+.watchPanel{padding:16px;display:flex;flex-direction:column;gap:12px;border-color:rgba(94,230,198,.4)}
+.subFoe.pair{flex-wrap:wrap}.subFoe.pair span{display:flex;align-items:center;gap:6px}.subFoe.pair .pairNote{width:100%;font-size:.9rem;color:var(--ink-dim)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -580,6 +582,16 @@ table{font-variant-numeric:lining-nums tabular-nums}
 <section class="sec">
   <div class="secHead"><div class="eyebrow">3 · what bites back · 11 monsters</div><h2 dir="rtl">המפלצות</h2></div>
   <div class="he"><p><b>11 יצורים, כולם ילידי הבאר</b>, וכולם צוירו במיוחד ב־Higgsfield. החדשים בגרסה הזאת: <span class="term">The Redacted</span>, <span class="term">The Watermark</span>, <span class="term">The Blotter</span>, <span class="term">The Quill Urchin</span>, <span class="term">The Bookworm</span> ו־<span class="term">The Crust</span>. לכל יצור צל משלו במים ותנועה משלו במד המשיכה, כך שאפשר לנחש מה נתפס עוד לפני שרואים אותו.</p></div>
+  <div class="panel watchPanel">
+    <div class="he"><p><b>לראות את השינויים בקרב:</b> כל כפתור פותח קרב מיד בבאר למעלה. בתוך הקרב לוחצים <b>End turn</b> כדי לראות מה היצור עושה, ובקרב עם The Undertow לוחצים גם <b>Strike</b>.</p></div>
+    <div class="demoRow">
+      <button class="btn small" type="button" onclick="WELL_FIGHT('blots')">The Blots · merge on turn 2</button>
+      <button class="btn small" type="button" onclick="WELL_FIGHT('watermark')">The Watermark · tears in two</button>
+      <button class="btn small" type="button" onclick="WELL_FIGHT('undertow')">The Undertow · hurl, sever, Chapter II</button>
+      <button class="btn small" type="button" onclick="WELL_FIGHT('quillUrchin',true)">From the dark · bigger, +25% HP</button>
+      <button class="btn small" type="button" onclick="WELL_FIGHT('crust')">The Crust · dissolves (pick the volume under the Well)</button>
+    </div>
+  </div>
   <div class="gallery" id="gallery"></div>
 </section>
 
@@ -1247,6 +1259,11 @@ function showFragment(fr){show(`<div class="reveal" style="--ring:#5ee6c6"><div 
   <div class="row"><button class="btn gold" type="button" data-close>Back to the Well</button></div></div></div>`);}
 function renderDrowned(){const el=$('drownedState');if(!el)return;el.textContent=S.freed?(S.frag>=D.DROWNED_STORY.length?`Freed, and remembered in full: ${D.DROWNED_CH.name} is playable.`:`Freed. He has remembered ${S.frag} of ${D.DROWNED_STORY.length}.`):'Still under the ink.';}
 window.WELL_DROWNED=renderDrowned;
+/* demo: open a fight straight away, so the changes can be seen without waiting for a bite */
+window.WELL_FIGHT=(key,dark)=>{if(!$('over').hidden)closeOver();$('well').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});
+  if(key==='undertow'){G.candles=[{},{},{}];hud();undertowRises(false);setTimeout(()=>{const b=$('overIn').querySelector('[data-boss]');if(b)b.click();},RM?0:1400);return;}
+  const f=[...D.FOES,...D.NEW_FOES].find(x=>x.key===key);G.cat='monster';G.dark=!!dark;G.foe=f;G.perfectStrike=false;G.phase='result';monsterReveal();
+  setTimeout(()=>{const b=$('overIn').querySelector('[data-fight]');if(b)b.click();},RM?0:1200);};
 /* demo: bring a cage up without waiting for the 1.5% */
 window.WELL_DEMO=k=>{if(k==='visit'){if(!$('over').hidden)closeOver();nextVisit();$('well').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});return;}
   if(G.phase!=='idle'&&$('over').hidden)return;G.cat=k;G.foe=null;G.dark=k==='dcage';G.perfectStrike=false;G.phase='result';$('well').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});reveal();};
@@ -1633,6 +1650,7 @@ const tile=(f,born)=>`<div class="panel foeCard"><div class="arena small hooked"
   <div class="role">${f.pull==='abyss'?'Abyssal pull':f.pull==='heavy'?'Heavy pull':'Light pull'} · ${/–/.test(f.acts)?'Volumes':'Volume'} ${esc(f.acts)} · <span class="nw">${f.hp} HP</span></div>
   <p class="note">${esc(f.note)}</p>
   <div class="rules">${f.rules.map(r=>`<div><b>${esc(r[0])}</b> ${esc(r[1])}</div>`).join('')}</div>
+  ${f.splitsTo?`<div class="subFoe pair">${f.splitsTo.map(s=>`<span><img src="${IMG[s.art]}" alt=""><b>${esc(s.name)}</b></span>`).join('')}<span class="pairNote">what it tears into at half HP</span></div>`:''}
   ${f.sub?`<div class="subFoe"><img src="${IMG[f.sub.art]}" alt=""><span><b>${esc(f.sub.name)}</b> what they become if two or more are still alive on turn 2</span></div>`:''}
   ${f.showCard?`<div class="row">${C({id:f.showCard},{sm:true})}</div>`:''}</div>`;
 $('gallery').innerHTML=D.FOES.map(f=>tile(f,true)).join('')+D.NEW_FOES.map(f=>tile(f,true)).join('');
